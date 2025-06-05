@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ClinicaWebApp.Models.Usuario.Paciente.Paciente>
+
+@{
+    ViewData["Title"] = "listarPacientes";
+    Layout = "~/Views/Shared/_LayoutRecepcionista.cshtml";
+}
+
+<h1>Pacientes</h1>
+<hr/>
+
+<p>
+    <a asp-action="listarPacientesPDF" style="color: red">
+        <i class="fas fa-file-pdf"></i> Exportar a PDF
+    </a>
+</p>
+
+<div class="card shadow mb-4">
+
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Pacientes Registrados</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdPaciente)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NombreUsuario)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApellidoUsuario)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaNacimiento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoDocumento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NumeroDocumento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Rol)
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdPaciente)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreUsuario)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApellidoUsuario)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaNacimiento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoDocumento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumeroDocumento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rol)
+                        </td>
+                        <td>
+                            <a class="btn btn-info me-2"
+                               href="@Url.Action("DetallePaciente", "Paciente",
+                                         new { id = item.IdPaciente })">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

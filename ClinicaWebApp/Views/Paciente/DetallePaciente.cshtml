@@ -1,0 +1,92 @@
+﻿@model ClinicaWebApp.Models.Usuario.Paciente.Paciente
+
+@{
+    ViewData["Title"] = "DetallePaciente";
+    var recepcionistaId = Context.Session.GetInt32("RecepcionistaId");
+    var medicoId = Context.Session.GetInt32("MedicoId");
+
+    if (medicoId != null && medicoId != 0)
+    {
+        Layout = "~/Views/Shared/_LayoutMedico.cshtml";
+    }
+    else if (recepcionistaId != null && recepcionistaId != 0)
+    {
+        Layout = "~/Views/Shared/_LayoutRecepcionista.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutPaciente.cshtml";
+    }
+}
+
+<h1>Detalle de Paciente</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdPaciente)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdPaciente)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NombreUsuario)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NombreUsuario)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApellidoUsuario)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApellidoUsuario)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaNacimiento)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FechaNacimiento)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TipoDocumento)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoDocumento)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumeroDocumento)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumeroDocumento)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rol)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rol)
+        </dd>
+    </dl>
+</div>
+<div class="mt-4">
+    @{
+        if (recepcionistaId != null && recepcionistaId != 0)
+        {
+            <a asp-controller="Recepcionista" asp-action="listarPacientes"
+               class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Regresar
+            </a>
+        }
+        else if (medicoId != null && medicoId != 0)
+        {
+            <a asp-controller="Medico" asp-action="listaCitaPorMedicos" asp-route-ide_usr="@medicoId"
+               class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Regresar
+            </a>
+        }
+    }
+
+    <a asp-action="DetallePacientePDF" asp-route-id="@Model.IdPaciente" class="btn btn-danger">
+        <i class="fas fa-file-pdf"></i> Exportar a PDF
+    </a>
+
+</div>
