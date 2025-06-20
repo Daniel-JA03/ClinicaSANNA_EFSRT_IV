@@ -19,74 +19,134 @@
     }
 }
 
-<h1>Detalle de Paciente</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm border-primary">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title mb-0"><i class="fas fa-user me-3"></i>Detalle de Paciente</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="text-primary mb-4"><i class="fas fa-info-circle me-3"></i>Información del Paciente</h4>
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IdPaciente)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IdPaciente)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreUsuario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NombreUsuario)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ApellidoUsuario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ApellidoUsuario)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaNacimiento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FechaNacimiento)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoDocumento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TipoDocumento)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NumeroDocumento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NumeroDocumento)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Rol)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Rol)
-        </dd>
-    </dl>
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-id-card me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.IdPaciente)
+                </div>
+                <div class="col-md-9">
+                    <span class="badge bg-primary text-white px-3 py-2">@Html.DisplayFor(model => model.IdPaciente)</span>
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-user me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.NombreUsuario)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.NombreUsuario)
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-user me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.ApellidoUsuario)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.ApellidoUsuario)
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-birthday-cake me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.FechaNacimiento)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.FechaNacimiento)
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-address-card me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.TipoDocumento)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.TipoDocumento)
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-id-badge me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.NumeroDocumento)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.NumeroDocumento)
+                </div>
+            </div>
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-3 fw-bold text-primary d-flex align-items-center">
+                    <i class="fas fa-user-tag me-3" style="width: 25px; font-size: 1.1rem;"></i>
+                    @Html.DisplayNameFor(model => model.Rol)
+                </div>
+                <div class="col-md-9">
+                    @Html.DisplayFor(model => model.Rol)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-start mt-4">
+        <div class="btn-group" style="gap: 15px;">
+            @{
+                if (recepcionistaId != null && recepcionistaId != 0)
+                {
+                    <a asp-controller="Recepcionista" asp-action="listarPacientes"
+                       class="btn btn-outline-primary px-4">
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
+                }
+                else if (medicoId != null && medicoId != 0)
+                {
+                    <a asp-controller="Medico" asp-action="listaCitaPorMedicos" asp-route-ide_usr="@medicoId"
+                       class="btn btn-outline-primary px-4">
+                        <i class="fas fa-arrow-left me-2"></i> Regresar
+                    </a>
+                }
+            }
+
+            <a asp-action="DetallePacientePDF" asp-route-id="@Model.IdPaciente" class="btn btn-danger px-4">
+                <i class="fas fa-file-pdf me-2"></i> Exportar PDF
+            </a>
+        </div>
+    </div>
 </div>
-<div class="mt-4">
-    @{
-        if (recepcionistaId != null && recepcionistaId != 0)
-        {
-            <a asp-controller="Recepcionista" asp-action="listarPacientes"
-               class="btn btn-secondary me-2">
-                <i class="fas fa-arrow-left"></i> Regresar
-            </a>
-        }
-        else if (medicoId != null && medicoId != 0)
-        {
-            <a asp-controller="Medico" asp-action="listaCitaPorMedicos" asp-route-ide_usr="@medicoId"
-               class="btn btn-secondary me-2">
-                <i class="fas fa-arrow-left"></i> Regresar
-            </a>
-        }
+
+<style>
+    .card {
+        border-radius: 10px;
     }
 
-    <a asp-action="DetallePacientePDF" asp-route-id="@Model.IdPaciente" class="btn btn-danger">
-        <i class="fas fa-file-pdf"></i> Exportar a PDF
-    </a>
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+        padding: 1.25rem;
+    }
 
-</div>
+    .row {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        min-height: 50px;
+    }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+    .badge {
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+</style>
