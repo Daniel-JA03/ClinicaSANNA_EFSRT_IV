@@ -167,21 +167,20 @@ public class CitaController : Controller
         return RedirectToAction("ListadoCitas");
     }
 
+
     [HttpPost]
+    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> eliminarCita(int id)
     {
         var response = await _httpClient.DeleteAsync($"/api/Cita/eliminarCita/{id}");
-
         if (response.IsSuccessStatusCode)
         {
-            TempData["mensaje"] = "Cita eliminada correctamente.";
+            return Json(new { success = true });
         }
         else
         {
-            TempData["mensaje"] = "Error al eliminar la cita.";
+            return Json(new { success = false });
         }
-
-        return RedirectToAction("ListadoCitas");
     }
 
 

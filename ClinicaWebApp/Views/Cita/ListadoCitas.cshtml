@@ -98,12 +98,17 @@
                                     <i class="fas fa-info-circle"></i>
                                 </a> *@
 
-                            <form action="@Url.Action("eliminarCita", new { id = item.IdCita })" method="post"
+                            @* <form action="@Url.Action("eliminarCita", new { id = item.IdCita })" method="post"
                                   style="display:inline;">
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                            </form>
+                            </form> *@
+
+                                <button type="button" class="btn btn-danger btn-eliminar"
+                                        data-url="@Url.Action("eliminarCita", new { id = item.IdCita })">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                         </td>
                     </tr>
                 }
@@ -114,3 +119,62 @@
 </div>
 
 
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const botonesEliminar = document.querySelectorAll('.btn-eliminar');
+
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener('click', function (event) {
+                    const urlEliminar = this.getAttribute('data-url');
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "¡No podrás revertir esta acción!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Envía una solicitud POST usando Fetch
+                            fetch(urlEliminar, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-Requested-With': 'XMLHttpRequest' // Opcional, para indicar que es una solicitud AJAX
+                                }
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Error al eliminar la cita.');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Actualiza la página después de la eliminación exitosa
+                                Swal.fire(
+                                    'Eliminado!',
+                                    'La cita ha sido eliminada correctamente.',
+                                    'success'
+                                ).then(() => {
+                                    // Recarga la página o realiza otra acción
+                                    location.reload();
+                                });
+                            })
+                            .catch(error => {
+                                Swal.fire(
+                                    'Error',
+                                    'Hubo un problema al eliminar la cita.',
+                                    'error'
+                                );
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}
