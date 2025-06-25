@@ -1,73 +1,111 @@
 ﻿@model ClinicaWebApp.Models.Usuario.Medico.MedicoO
 
 @{
+
     ViewData["Title"] = "NuevoMedico";
     Layout = "~/Views/Shared/_LayoutRecepcionista.cshtml";
     var listaDocumentos = ViewBag.documentos as SelectList;
     var listaEspecialidad = ViewBag.especialidad as SelectList;
+
+    var recepcionistaId = Context.Session.GetInt32("RecepcionistaId");
 }
 
-<h1>Registrar Nuevo Medico</h1>
-<hr/>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="NuevoMedico">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="nom_usr" class="control-label"></label>
-                <input asp-for="nom_usr" class="form-control"/>
-                <span asp-validation-for="nom_usr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ape_usr" class="control-label"></label>
-                <input asp-for="ape_usr" class="form-control"/>
-                <span asp-validation-for="ape_usr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ide_doc" class="control-label"></label>
-                @Html.DropDownListFor(model => model.ide_doc, listaDocumentos, new { @class = "form-control" })
-                <span asp-validation-for="ide_doc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="num_doc" class="control-label"></label>
-                <input asp-for="num_doc" class="form-control"/>
-                <span asp-validation-for="num_doc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="fna_usr" class="control-label"></label>
-                <input asp-for="fna_usr" class="form-control"/>
-                <span asp-validation-for="fna_usr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ide_esp" class="control-label"></label>
-                @Html.DropDownListFor(model => model.ide_esp, listaEspecialidad, new { @class = "form-control" })
-                <span asp-validation-for="ide_esp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="sue_med" class="control-label"></label>
-                <input asp-for="sue_med" class="form-control"/>
-                <span asp-validation-for="sue_med" class="text-danger"></span>
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h2 class="card-title mb-0">
+                    <i class="fas fa-user-md " style="margin-right: 15px;"></i>Registrar Nuevo Médico
+                </h2>
             </div>
 
-            <div class="form-group">
-                <label asp-for="cor_usr" class="control-label"></label>
-                <input asp-for="cor_usr" class="form-control"/>
-                <span asp-validation-for="cor_usr" class="text-danger"></span>
+            <div class="card-body">
+                <form asp-action="NuevoMedico">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="nom_usr" class="form-label fw-bold text-primary">
+                            <i class="fas fa-user " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.nom_usr)
+                        </label>
+                        <input asp-for="nom_usr" class="form-control" />
+                        <span asp-validation-for="nom_usr" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ape_usr" class="form-label fw-bold text-primary">
+                            <i class="fas fa-user-tag " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.ape_usr)
+                        </label>
+                        <input asp-for="ape_usr" class="form-control" />
+                        <span asp-validation-for="ape_usr" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ide_doc" class="form-label fw-bold text-primary">
+                            <i class="fas fa-file-alt " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.ide_doc)
+                        </label>
+                        @Html.DropDownListFor(model => model.ide_doc, listaDocumentos, new { @class = "form-control" })
+                        <span asp-validation-for="ide_doc" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="num_doc" class="form-label fw-bold text-primary">
+                            <i class="fas fa-id-card " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.num_doc)
+                        </label>
+                        <input asp-for="num_doc" class="form-control" />
+                        <span asp-validation-for="num_doc" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="fna_usr" class="form-label fw-bold text-primary">
+                            <i class="fas fa-calendar-alt " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.fna_usr)
+                        </label>
+                        <input asp-for="fna_usr" class="form-control" />
+                        <span asp-validation-for="fna_usr" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ide_esp" class="form-label fw-bold text-primary">
+                            <i class="fas fa-stethoscope " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.ide_esp)
+                        </label>
+                        @Html.DropDownListFor(model => model.ide_esp, listaEspecialidad, new { @class = "form-control" })
+                        <span asp-validation-for="ide_esp" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="sue_med" class="form-label fw-bold text-primary">
+                            <i class="fas fa-dollar-sign " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.sue_med)
+                        </label>
+                        <input asp-for="sue_med" class="form-control" type="number" step="0.01" min="0.01" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46" />
+                        <span asp-validation-for="sue_med" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="cor_usr" class="form-label fw-bold text-primary">
+                            <i class="fas fa-envelope " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.cor_usr)
+                        </label>
+                        <input asp-for="cor_usr" type="email" class="form-control" maxlength="100" minlength="8" />
+                        <span asp-validation-for="cor_usr" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="pwd_usr" class="form-label fw-bold text-primary">
+                            <i class="fas fa-lock " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.pwd_usr)
+                        </label>
+                        <input asp-for="pwd_usr" class="form-control" type="password" />
+                        <span asp-validation-for="pwd_usr" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" class="btn btn-success " style="margin-right: 8px;">
+                            <i class="fas fa-user-check " style="margin-right: 5px;"></i>Registrar
+                        </button>
+                        <a asp-controller="Recepcionista" asp-action="listarMedicos" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>Volver a la lista
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="pwd_usr" class="control-label"></label>
-                <input asp-for="pwd_usr" class="form-control"/>
-                <span asp-validation-for="pwd_usr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

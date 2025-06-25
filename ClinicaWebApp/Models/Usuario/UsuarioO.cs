@@ -8,6 +8,8 @@ public class UsuarioO
     [DisplayName("Correo")]
     [Required(ErrorMessage = "El campo correo es requerido")]
     [StringLength(100, ErrorMessage = "Minimo 8, Maximo 100 Carateres", MinimumLength = 8)]
+    [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+    ErrorMessage = "El formato del correo electrónico no es válido. Ejemplo: usuario@dominio.com")]
     public string? cor_usr { get; set; }
 
     [DisplayName("Contraseña")]

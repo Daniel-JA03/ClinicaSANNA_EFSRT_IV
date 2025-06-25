@@ -10,6 +10,8 @@ public class MedicoO : UsuarioO
 
     [DisplayName("Sueldo")]
     [Required(ErrorMessage = "El Sueldo es requerido")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El sueldo debe ser mayor a 0")]
+    [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Solo se permiten números con hasta 2 decimales")]
     public decimal sue_med { get; set; }
 
     [DisplayName("Especialidad")]
