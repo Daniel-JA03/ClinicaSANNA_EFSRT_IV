@@ -13,7 +13,7 @@ public class Pago
     [DisplayName("Monto")]
     public decimal MontoPago { get; set; }
 
-    [DisplayName("Modalidad")]
+    [DisplayName("Tipo Pago")]
     public string? TipoPago { get; set; }
 
     [DisplayName("Cliente")]
