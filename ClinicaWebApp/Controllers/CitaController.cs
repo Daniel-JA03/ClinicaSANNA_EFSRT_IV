@@ -79,17 +79,6 @@ public class CitaController : Controller
         return View(citas);
     }
 
-    [HttpGet]
-    public IActionResult nuevaCita(int PagoId)
-    {
-        int IdPaciente = int.Parse(HttpContext.Session.GetString("token"));
-        Console.WriteLine(IdPaciente);
-        ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
-        ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
-        CitaO citaPagada = new CitaO() { IdPago = PagoId, IdPaciente = IdPaciente };
-
-        return View(citaPagada);
-    }
 
     private async Task<bool> ExisteCita(CitaO obj)
     {
@@ -102,7 +91,27 @@ public class CitaController : Controller
             c.CalendarioCita.Minute == obj.CalendarioCita.Minute);
     }
 
+    [HttpGet]
+    public IActionResult nuevaCita(int PagoId)
+    {
+        int IdPaciente = int.Parse(HttpContext.Session.GetString("token"));
 
+        // Obtener listado de médicos con NombreUsuario + Especialidad
+        var medicos = listadoMedico()
+            .Select(m => new SelectListItem
+            {
+                Value = m.IdMedico.ToString(),
+                Text = $"Dr. {m.NombreUsuario} - {m.especialidad}"
+            })
+            .ToList();
+
+        ViewBag.medicos = medicos;
+
+        ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
+
+        CitaO citaPagada = new CitaO() { IdPago = PagoId, IdPaciente = IdPaciente };
+        return View(citaPagada);
+    }
 
     [HttpPost]
     public async Task<IActionResult> nuevaCita(CitaO obj)
