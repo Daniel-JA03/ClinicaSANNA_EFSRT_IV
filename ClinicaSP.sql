@@ -809,8 +809,12 @@ BEGIN
              JOIN paciente p ON p.ide_pac = c.ide_pac
              JOIN usuario up ON up.ide_usr = p.ide_usr  -- ¡Corrección aquí!
              JOIN pago pg ON c.ide_pag = pg.ide_pag
+	ORDER BY 
+			CASE WHEN CAST(c.cal_cit AS DATE) = CAST(GETDATE() AS DATE) THEN 0 ELSE 1 END,
+			c.cal_cit DESC
 END
 GO
+
 
 sp_listarCitasFront
 GO
