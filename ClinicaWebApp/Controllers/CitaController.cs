@@ -91,11 +91,35 @@ public class CitaController : Controller
         return View(citaPagada);
     }
 
+    private async Task<bool> ExisteCita(CitaO obj)
+    {
+        List<Cita> citas = ArregloClitas(); // Obtiene todas las citas desde el API
+
+        return citas.Any(c =>
+            c.NombreMedico != null &&
+            c.CalendarioCita.Date == obj.CalendarioCita.Date &&
+            c.CalendarioCita.Hour == obj.CalendarioCita.Hour &&
+            c.CalendarioCita.Minute == obj.CalendarioCita.Minute);
+    }
+
+
+
     [HttpPost]
     public async Task<IActionResult> nuevaCita(CitaO obj)
     {
+        
         if (!ModelState.IsValid)
         {
+            ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
+            ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
+            return View(obj);
+        }
+
+        // Validar que no haya una cita ya programada a la misma hora para el mismo médico
+        bool citaExiste = await ExisteCita(obj);
+        if (citaExiste)
+        {
+            ModelState.AddModelError("CalendarioCita", "Ya existe una cita programada para este médico en esta fecha y hora.");
             ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
             ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
             return View(obj);
@@ -104,22 +128,21 @@ public class CitaController : Controller
         var json = JsonConvert.SerializeObject(obj);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var responseC = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Cita/agregaCita", content);
+
         if (responseC.IsSuccessStatusCode)
         {
-            ViewBag.mensaje = "Cita registrado correctamente..!!!";
-            Console.WriteLine("Objeto " + obj.ToJson());
+            int? idPaciente = HttpContext.Session.GetInt32("PacienteId");
+            if (idPaciente == null || idPaciente == 0)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return RedirectToAction("listaCitaPorPaciente", "Paciente", new { ide_usr = Convert.ToInt64(idPaciente) });
         }
 
+        ViewBag.mensaje = "Error al registrar la cita.";
         ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
         ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
-
-        int? idPaciente = HttpContext.Session.GetInt32("PacienteId");
-        if (idPaciente == null || idPaciente == 0)
-        {
-            return RedirectToAction("Index", "Login");
-        }
-
-        return RedirectToAction("listaCitaPorPaciente", "Paciente", new { ide_usr = Convert.ToInt64(idPaciente) });
+        return View(obj);
     }
 
     [HttpGet]

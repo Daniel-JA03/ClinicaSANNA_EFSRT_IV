@@ -22,7 +22,7 @@
                         <label asp-for="CalendarioCita" class="form-label fw-bold text-primary">
                             <i class="fas fa-calendar-alt " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.CalendarioCita)
                         </label>
-                        <input asp-for="CalendarioCita" class="form-control" />
+                        <input asp-for="CalendarioCita" class="form-control" type="datetime-local" />
                         <span asp-validation-for="CalendarioCita" class="text-danger"></span>
                     </div>
 
@@ -61,3 +61,32 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const fechaInput = document.getElementById("CalendarioCita").value;
+            if (!fechaInput) {
+                alert("Por favor, selecciona una fecha y hora válida.");
+                e.preventDefault();
+                return;
+            }
+
+            const fechaSeleccionada = new Date(fechaInput);
+            const fechaActual = new Date();
+
+            // Comparar si la fecha seleccionada es anterior a la actual
+            if (fechaSeleccionada < fechaActual) {
+                e.preventDefault(); // Detener el envío del formulario
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Fecha inválida',
+                    text: 'No puedes seleccionar una fecha u hora pasada.',
+                    confirmButtonText: 'Entendido'
+                });
+            }
+        });
+    </script>
+}

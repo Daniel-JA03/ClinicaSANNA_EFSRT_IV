@@ -7,8 +7,9 @@ public class CitaO
 {
     public long IdCita { get; set; }
 
-    [DisplayName("Fecha de Cita")]
-    [Required(ErrorMessage = "Fecha de Cita es requerida")]
+    [Required(ErrorMessage = "La fecha y hora son obligatorias.")]
+    [Display(Name = "Fecha y Hora de la Cita")]
+    [FutureDate(ErrorMessage = "La fecha debe ser futura.")]
     public DateTime CalendarioCita { get; set; }
 
     [Required(ErrorMessage = "Consultorio es requerido")]
