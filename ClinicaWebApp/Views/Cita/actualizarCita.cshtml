@@ -42,7 +42,8 @@
                             <i class="fas fa-user-md " style="margin-right: 8px;"></i>@Html.DisplayNameFor(m => m.IdMedico)
                         </label>
                         @Html.DropDownListFor(model => model.IdMedico,
-                                 (SelectList)ViewBag.medicos, "(Seleccione el Medico)",
+                                 (IEnumerable<SelectListItem>)ViewBag.medicos,
+                                 "(Seleccione el Médico)",
                                  new { @class = "form-select custom-select", @id = "selMed" })
                         <span asp-validation-for="IdMedico" class="text-danger"></span>
                     </div>

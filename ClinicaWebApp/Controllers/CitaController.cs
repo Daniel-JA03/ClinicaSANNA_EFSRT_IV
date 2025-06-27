@@ -157,14 +157,23 @@ public class CitaController : Controller
     [HttpGet]
     public async Task<IActionResult> actualizarCita(int id)
     {
-        var response = await
-            _httpClient.GetAsync(_httpClient.BaseAddress + "/Cita/buscarCita/" + id);
+        var response = await _httpClient.GetAsync(_httpClient.BaseAddress + "/Cita/buscarCita/" + id);
 
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
             var objC = JsonConvert.DeserializeObject<CitaO>(content);
-            ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
+
+            // Obtener listado de médicos con NombreUsuario + Especialidad (igual que en nuevaCita)
+            var medicos = listadoMedico()
+                .Select(m => new SelectListItem
+                {
+                    Value = m.IdMedico.ToString(),
+                    Text = $"Dr. {m.NombreUsuario} - {m.especialidad}"
+                })
+                .ToList();
+
+            ViewBag.medicos = medicos;
             ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
             return View(objC);
         }
@@ -173,30 +182,59 @@ public class CitaController : Controller
             ViewBag.mensaje = "No Hay Cita";
         }
 
-        ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
+        // Mantener el mismo formato si falla
+        var medicosFallback = listadoMedico()
+            .Select(m => new SelectListItem
+            {
+                Value = m.IdMedico.ToString(),
+                Text = $"Dr. {m.NombreUsuario} - {m.especialidad}"
+            })
+            .ToList();
+
+        ViewBag.medicos = medicosFallback;
         ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
         return View();
     }
 
-
     [HttpPost]
     public async Task<IActionResult> actualizarCita(int id, CitaO obj)
     {
+        if (!ModelState.IsValid)
+        {
+            // Mantener el formato de médicos con especialidad cuando hay error de validación
+            ViewBag.medicos = listadoMedico()
+                .Select(m => new SelectListItem
+                {
+                    Value = m.IdMedico.ToString(),
+                    Text = $"Dr. {m.NombreUsuario} - {m.especialidad}"
+                })
+                .ToList();
+            ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
+            return View(obj);
+        }
+
         var json = JsonConvert.SerializeObject(obj);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await
-            _httpClient.PutAsync("/api/Cita/actualizaCita?id={ id }", content);
+        // Corregí la URL que tenía un error (usaba cadena literal en lugar de interpolación)
+        var response = await _httpClient.PutAsync($"/api/Cita/actualizaCita?id={id}", content);
+
         if (response.IsSuccessStatusCode)
         {
-            ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
-            ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
-            ViewBag.mensaje = "Cita actualizada correctamente";
+            return RedirectToAction("ListadoCitas");
         }
 
-        ViewBag.medicos = new SelectList(listadoMedico(), "IdMedico", "NombreUsuario");
+        // Si falla la actualización, mantener el formato de médicos con especialidad
+        ViewBag.medicos = listadoMedico()
+            .Select(m => new SelectListItem
+            {
+                Value = m.IdMedico.ToString(),
+                Text = $"Dr. {m.NombreUsuario} - {m.especialidad}"
+            })
+            .ToList();
         ViewBag.pacientes = new SelectList(listadoPaciente(), "IdPaciente", "NombreUsuario");
-        return RedirectToAction("ListadoCitas");
+        ViewBag.mensaje = "Error al actualizar la cita";
+        return View(obj);
     }
 
 
